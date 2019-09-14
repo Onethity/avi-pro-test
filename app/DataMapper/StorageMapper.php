@@ -25,7 +25,7 @@ class StorageMapper
     }
 
     /**
-     * In inserts an entity to database and sets its id
+     * It inserts an entity to database and sets its id
      */
     public function insert(Storage $storage)
     {
