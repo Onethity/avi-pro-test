@@ -1,7 +1,7 @@
 <?php
 use DI\Container;
 use Slim\Factory\AppFactory;
-use Aviprotest\Controller;
+use Slim\Routing\RouteCollectorProxy; 
 use Aviprotest\Controller\ApiController;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -28,12 +28,39 @@ $container->set('pdo', function () use ($container) {
 });
 
 $app = AppFactory::create();
+$app->addRoutingMiddleware();
+
+/**
+ * Error Handler
+ */
+$customErrorHandler = function (
+    Slim\Psr7\Request $request,
+    Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails
+) use ($app) {
+    $payload = ['error' => $exception->getMessage()];
+
+    $response = $app->getResponseFactory()->createResponse();
+    $response->getBody()->write(
+        json_encode($payload)
+    );
+
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+};
+
+// Add Error Middleware
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+
 
 /**
  * Application routes
  */
-$app->get('/api/generate/', ApiController::class . ':generate');
-$app->get('/api/retrieve/', ApiController::class . 'retrieve');
-
+$app->group('/api',  function (RouteCollectorProxy $group) { 
+    $group->get('/generate/', ApiController::class . ':generate');
+    $group->get('/retrieve/', ApiController::class . ':retrieve');
+});
 
 $app->run();
