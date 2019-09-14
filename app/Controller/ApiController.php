@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Aviprotest\Datamapper\StorageMapper;
 use Aviprotest\Entity\Storage;
+use Aviprotest\Exception\ControllerException;
 
 class ApiController 
 {
@@ -50,6 +51,23 @@ class ApiController
      */
     public function retrieve(Request $request, Response $response, array $args)
     {
-        return $response;
+        //get requested id from query
+        $id = $request->getQueryParams()['id'];
+        if(is_null($id)) {
+            throw new ControllerException('You must send an id as get param');
+        }
+
+        $storage = $this->storageMapper->getById(intval($id));
+        if(!$storage) {
+            throw new ControllerException('The requested entity doesnt exsist');
+        }
+
+
+        //format storage data as json and print it
+        $payload = json_encode($storage);
+        $response->getBody()->write($payload);
+
+        return $response
+                  ->withHeader('Content-Type', 'application/json');
     }
 }
