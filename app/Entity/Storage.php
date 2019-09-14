@@ -20,6 +20,14 @@ class Storage
     public $value;
 
     /**
+     * Below are constants that desribe type of random value
+     */
+    const TYPE_STRING = 'string';
+    const TYPE_INT = 'int';
+    const TYPE_GUID = 'guid';
+    const TYPE_TEXT = 'text';
+
+    /**
      * It fills an antity with random value
      */
     public function fillRandom()
