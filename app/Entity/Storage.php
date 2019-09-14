@@ -1,8 +1,9 @@
 <?php
-
 /**
  * The class describes a storage entity
  */
+
+declare(strict_types=1);
 
 namespace Aviprotest\Entity;
 
