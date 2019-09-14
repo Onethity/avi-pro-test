@@ -38,14 +38,19 @@ class ApiController
      */
     public function generate(Request $request, Response $response, array $args)
     {
-        //create random entity
-        $storage = new Storage;
-        $storage->fillRandom();
+        //get requested type of value
+        $type = $request->getQueryParams()['type'] ?? 'int';
 
-        //then insert it to database
-        $this->storageMapper->insert($storage);
+        if($this->queryValidator->isTypeValid($type)) {
+            //create random entity
+            $storage = new Storage;
+            $storage->fillRandom();
 
-        return $this->jsonResponse((array) $storage, $response);
+            //then insert it to database
+            $this->storageMapper->insert($storage);
+
+            return $this->jsonResponse((array) $storage, $response);
+        }
     }
 
     /**
