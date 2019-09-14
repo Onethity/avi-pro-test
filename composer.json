@@ -1,4 +1,7 @@
 {
+    "name": "Onethity/Aviprotest",
+    "description": "A simple api to generate and retrieve random values",
+    
     "require": {
         "slim/slim": "4.0.0",
         "slim/psr7": "^0.5.0",
