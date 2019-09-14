@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Aviprotest\Datamapper;
 
 use Aviprotest\Entity\Storage;
+use Aviprotest\Exception\DataMapperException;
 use Psr\Container\ContainerInterface;
 use \PDO;
 
@@ -36,5 +37,24 @@ class StorageMapper
 
         //set id to entity
         $storage->id = intval($this->pdo->lastInsertId());
+    }
+
+    /**
+     * It gets storage entity by its id
+     */
+    public function getById(int $id): Storage
+    {
+        $query = "SELECT * FROM storage WHERE id = :id LIMIT 1";
+        $stm = $this->pdo->prepare($query);
+        $stm->execute([
+            ':id' => $id
+        ]);
+
+        $storage = $stm->fetchObject('Aviprotest\Entity\Storage');
+        if(!$storage) {
+            throw new DataMapperException('Not found');
+        }
+
+        return $storage;
     }
 }
