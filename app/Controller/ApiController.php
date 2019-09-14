@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Aviprotest\Datamapper\StorageMapper;
 use Aviprotest\Entity\Storage;
 use Aviprotest\Exception\ControllerException;
+use Aviprotest\Service\QueryValidator;
 
 class ApiController 
 {
@@ -21,14 +22,19 @@ class ApiController
      */
     protected $storageMapper;
 
+    /**
+     * @var QueryValidator;
+     */
+    protected $queryValidator;
 
     public function __construct(ContainerInterface $container)
     {
         $this->storageMapper = new StorageMapper($container);
+        $this->queryValidator = new QueryValidator();
     }
 
     /**
-     * Generate random value and it's id
+     * Generate random value and print it
      */
     public function generate(Request $request, Response $response, array $args)
     {
@@ -39,11 +45,7 @@ class ApiController
         //then insert it to database
         $this->storageMapper->insert($storage);
 
-        //format storage data as json and print it
-        $payload = json_encode($storage);
-        $response->getBody()->write($payload);
-        return $response
-                  ->withHeader('Content-Type', 'application/json');
+        return $this->jsonResponse((array) $storage, $response);
     }
 
     /**
@@ -52,22 +54,25 @@ class ApiController
     public function retrieve(Request $request, Response $response, array $args)
     {
         //get requested id from query
-        $id = $request->getQueryParams()['id'];
-        if(is_null($id)) {
-            throw new ControllerException('You must send an id as get param');
+        $id = intval($request->getQueryParams()['id']);
+
+        if($this->queryValidator->isIdValid($id)) {
+            //get storage object by requested id
+            $storage = $this->storageMapper->getById($id);
+
+            return $this->jsonResponse((array) $storage, $response);
         }
+    }
 
-        $storage = $this->storageMapper->getById(intval($id));
-        if(!$storage) {
-            throw new ControllerException('The requested entity doesnt exsist');
-        }
-
-
-        //format storage data as json and print it
-        $payload = json_encode($storage);
+    /**
+     * Puts an array to response using json format
+     * @return Response
+     */
+    protected function jsonResponse(array $arr, Response $response)
+    {
+        $payload = json_encode($arr);
         $response->getBody()->write($payload);
 
-        return $response
-                  ->withHeader('Content-Type', 'application/json');
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
