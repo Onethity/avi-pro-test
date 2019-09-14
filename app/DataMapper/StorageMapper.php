@@ -52,7 +52,7 @@ class StorageMapper
 
         $storage = $stm->fetchObject('Aviprotest\Entity\Storage');
         if(!$storage) {
-            throw new DataMapperException('Not found');
+            throw new DataMapperException('Value with this ID is not found');
         }
 
         return $storage;
