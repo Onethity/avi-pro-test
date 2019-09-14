@@ -30,8 +30,28 @@ class Storage
     /**
      * It fills an antity with random value
      */
-    public function fillRandom()
+    public function fillRandom(string $type): void
     {
-        $this->value = random_int(PHP_INT_MIN, PHP_INT_MAX);
+        switch ($type) {
+            case Storage::TYPE_INT:
+                $value = random_int(PHP_INT_MIN, PHP_INT_MAX);
+                break;
+                
+            case Storage::TYPE_GUID:
+                $value = \com_create_guid(); 
+                break;
+
+            case Storage::TYPE_STRING:
+                $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $value = substr(str_shuffle($chars), 0, 30);
+                break;
+                
+            case Storage::TYPE_TEXT:
+                $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $value = substr(str_shuffle($chars), 0, 30);
+                break;
+        }
+
+        $this->value = $value;
     }
 }
