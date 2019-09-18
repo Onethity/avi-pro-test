@@ -74,6 +74,7 @@ class ApiController
 
     /**
      * Puts an array to response using json format
+     * 
      * @return Response
      */
     protected function jsonResponse(array $arr, Response $response)

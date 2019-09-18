@@ -19,7 +19,6 @@ class QueryValidator
     {
         if($id < 1) {
             throw new ValidatorException('ID must be an integer value and can not be less than 1');
-
             return false;
         } else {
             return true;
@@ -38,7 +37,6 @@ class QueryValidator
             Storage::TYPE_TEXT
             ])) {
             throw new ValidatorException('Incorrect type of random value');
-
             return false;
         } else {
             return true;
@@ -52,7 +50,6 @@ class QueryValidator
     {
         if($length < 1) {
             throw new ValidatorException('Length could be 1 or more');
-
             return false;
         } else {
             return true;
