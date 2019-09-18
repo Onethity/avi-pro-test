@@ -39,12 +39,15 @@ class ApiController
     public function generate(Request $request, Response $response, array $args)
     {
         //get requested type of value
-        $type = $request->getQueryParams()['type'] ?? Storage::TYPE_INT;
+        $type = strval($request->getQueryParams()['type'] ?? Storage::TYPE_INT);
 
-        if($this->queryValidator->isTypeValid($type)) {
+        //get requested length of value
+        $length = intval($request->getQueryParams()['length'] ?? 30);
+
+        if($this->queryValidator->isTypeValid($type) && $this->queryValidator->isLengthValid($length)) {
             //create random entity
             $storage = new Storage();
-            $storage->fillRandom($type);
+            $storage->fillRandom($type, $length);
 
             //then insert it to database
             $this->storageMapper->insert($storage);

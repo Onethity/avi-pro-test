@@ -30,11 +30,11 @@ class Storage
     /**
      * It fills an antity with random value
      */
-    public function fillRandom(string $type): void
+    public function fillRandom(string $type, int $length): void
     {
         switch ($type) {
             case Storage::TYPE_INT:
-                $value = random_int(PHP_INT_MIN, PHP_INT_MAX);
+                $value = random_int(0, $length);
                 break;
                 
             case Storage::TYPE_GUID:
@@ -43,12 +43,12 @@ class Storage
 
             case Storage::TYPE_STRING:
                 $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                $value = substr(str_shuffle($chars), 0, 30);
+                $value = substr(str_shuffle($chars), 0, $length);
                 break;
                 
             case Storage::TYPE_TEXT:
                 $chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                $value = substr(str_shuffle($chars), 0, 30);
+                $value = substr(str_shuffle($chars), 0, $length);
                 break;
         }
 
