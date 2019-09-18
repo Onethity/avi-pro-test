@@ -28,7 +28,7 @@ class Storage
     const TYPE_TEXT = 'text';
 
     /**
-     * It fills an antity with random value
+     * It fills an entity with random value
      */
     public function fillRandom(string $type, int $length): void
     {
@@ -53,5 +53,20 @@ class Storage
         }
 
         $this->value = $value;
+    }
+
+    /**
+     * Generates random string
+     */
+    private function randomString($chars, $length)
+    {
+        $charsLength = strlen($chars);
+        $output = '';
+        for($i = 0; $i < $charsLength; $i++) {
+            $random_character = $chars[mt_rand(0, $charsLength - 1)];
+            $output .= $random_character;
+        }
+     
+        return $output;
     }
 }
