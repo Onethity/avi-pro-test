@@ -59,7 +59,7 @@ class ApiController
     public function retrieve(Request $request, Response $response, array $args)
     {
         //get requested id from query
-        $id = intval($request->getQueryParams()['id']);
+        $id = intval($request->getQueryParams()['id'] ?? 0);
 
         if($this->queryValidator->isIdValid($id)) {
             //get storage object by requested id
