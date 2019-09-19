@@ -12,7 +12,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Aviprotest\Datamapper\StorageMapper;
 use Aviprotest\Entity\Storage;
-use Aviprotest\Exception\ControllerException;
 use Aviprotest\Service\QueryValidator;
 
 class ApiController 
