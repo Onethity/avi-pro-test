@@ -35,7 +35,7 @@ class QueryValidator
             Storage::TYPE_INT, 
             Storage::TYPE_GUID, 
             Storage::TYPE_TEXT
-            ])) {
+        ])) {
             throw new ValidatorException('Incorrect type of random value');
             return false;
         } else {
