@@ -12,24 +12,33 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Aviprotest\Datamapper\StorageMapper;
 use Aviprotest\Entity\Storage;
-use Aviprotest\Service\QueryValidator;
+use Aviprotest\Service\{
+    QueryValidator,
+    RandomGenerator,
+};
 
 class ApiController 
 {
     /**
-     * @var StorageMappper;
+     * @var StorageMappper
      */
     protected $storageMapper;
 
     /**
-     * @var QueryValidator;
+     * @var QueryValidator
      */
     protected $queryValidator;
+
+    /**
+     * @var RandomGenerator
+     */
+    protected $randomGenerator;
 
     public function __construct(ContainerInterface $container)
     {
         $this->storageMapper = new StorageMapper($container);
         $this->queryValidator = new QueryValidator();
+        $this->randomGenerator = new RandomGenerator();
     }
 
     /**
@@ -46,7 +55,7 @@ class ApiController
         if($this->queryValidator->isTypeValid($type) && $this->queryValidator->isLengthValid($length)) {
             //create random entity
             $storage = new Storage();
-            $storage->fillRandom($type, $length);
+            $storage->value = $this->randomGenerator->getRandom($type, $length);
 
             //then insert it to database
             $this->storageMapper->insert($storage);
