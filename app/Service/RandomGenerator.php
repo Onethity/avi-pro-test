@@ -13,7 +13,7 @@ class RandomGenerator
 {
     /**
      * Returns a random value
-     * You must validate a $type before use this function
+     * You must validate a $type before use this function, else it will return null
      * @param string type of value must be one of Storage::const
      * @param int lenght of string value or maximum integer value
      */
